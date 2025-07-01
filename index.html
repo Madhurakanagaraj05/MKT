@@ -56,8 +56,9 @@
     .cart-item button:active { transform: scale(.95); }
     footer { background: #090909; color: #fff; text-align: center; padding: 20px; }
     #notification {
-      display: none; position: fixed; bottom: 20px; right: 20px;
-      background: #28a745; color: #fff; padding: 10px 16px; border-radius: 5px;
+      display: none; position: fixed; bottom: 70px; right: 20px;
+      background: #d4edda; /* soft green */
+color: #155724;  padding: 10px 16px; border-radius: 5px;
       font-size: 14px; box-shadow: 0 0 10px rgba(0,0,0,0.3); opacity: 0;
       transition: opacity .5s; z-index: 999;
     }
@@ -141,8 +142,8 @@ body.dark-mode input#searchInput {
 }
 
 body.dark-mode #notification {
-  background: #4caf50;
-  color: #fff;
+    background: #cde8d2;
+  color: #1e3b2f;
 }
 
 body.dark-mode #qrModal .modal-content {
@@ -265,6 +266,12 @@ input:checked + .slider:before {
 .product button {
   font-size: 14px;
   padding: 6px 10px;
+}
+body.dark-mode #cartCount {
+  color: #ffffff;         /* White or light color for visibility */
+  font-weight: bold;
+  
+      /* Space between 🛒 and number */
 }
 
   </style>
@@ -579,13 +586,18 @@ function showLogin(){document.getElementById("authChoice").style.display="none";
 function showSignup(){document.getElementById("authChoice").style.display="none";document.getElementById("signupDiv").style.display="block";}
 function backAuth(){document.getElementById("loginDiv").style.display="none";document.getElementById("signupDiv").style.display="none";document.getElementById("authChoice").style.display="block";}
 function signup(){
-  let u=document.getElementById("signupUser").value;
-  let p=document.getElementById("signupPass").value;
-  let users=JSON.parse(localStorage.getItem("mktUsers")||"[]");
-  if(users.find(x=>x.username===u)){alert("User exists");return;}
-  users.push({username:u,password:p});
-  localStorage.setItem("mktUsers",JSON.stringify(users));
-  alert("Registered. Please login.");showLogin();
+  let u = document.getElementById("signupUser").value;
+  let p = document.getElementById("signupPass").value;
+  let users = JSON.parse(localStorage.getItem("mktUsers") || "[]");
+  if (users.find(x => x.username === u)) {
+    alert("User exists");
+    return;
+  }
+  users.push({username: u, password: p});
+  localStorage.setItem("mktUsers", JSON.stringify(users));
+  alert("Registered. Please login.");
+  document.getElementById("signupDiv").style.display = "none";
+  document.getElementById("loginDiv").style.display = "block";
 }
 function login(){
   let u=document.getElementById("loginUser").value;
