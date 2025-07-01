@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MKT DEPARTMENT STORE</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+    header, nav, section, footer { flex-shrink: 0; }
+    main { flex: 1; }
+    .header { background: #090909; color: #fff; text-align: center; padding: 20px; }
+    .logo { max-width: 150px; display: block; margin: 0 auto 10px; }
+    nav { background: #333; text-align: center; padding: 10px 0; }
+    nav a {
+  color: #fff;
+  margin: 0 20px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  padding-top: 5px; /* pushes text down slightly */
+  padding-bottom: 2px; /* optional, keeps spacing balanced */
+}
+    nav a:hover { text-decoration: underline; }
+    .hero { background: #f4f4f4; padding: 50px; text-align: center; }
+    .hero h2 { font-size: 36px; margin-bottom: 10px; }
+    .categories, .products { text-align: center; }
+    .categories { margin: 30px 0; }
+    .categories button, .product button {
+      margin: 10px; padding: 10px 20px; font-size: 16px;
+      background: #090909; color: #fff; border: none;
+      cursor: pointer; transition: background .3s;
+    }
+    .categories button:hover, .product button:hover { background: #999; }
+    .product-grid {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 20px;
+    }
+    .product {
+      border: 1px solid #ccc; padding: 20px; width: 200px; display: none;
+    }
+    .product img { width: 100%; height: 150px; object-fit: cover; }
+    .product button:active { transform: scale(.95); }
+    .auth input { margin:5px; padding:5px; width:200px; }
+    .cart, .about, .contact, .orders, .profile { padding: 40px; background: #f9f9f9; text-align: center; }
+    .cart-item { margin: 10px 0; }
+    .cart-item button {
+      margin-left: 10px; padding: 5px 10px;
+      background: #28a745; color: #fff; border: none; cursor: pointer;
+    }
+    .cart-item button:active { transform: scale(.95); }
+    footer { background: #090909; color: #fff; text-align: center; padding: 20px; }
+    #notification {
+      display: none; position: fixed; bottom: 20px; right: 20px;
+      background: #28a745; color: #fff; padding: 10px 16px; border-radius: 5px;
+      font-size: 14px; box-shadow: 0 0 10px rgba(0,0,0,0.3); opacity: 0;
+      transition: opacity .5s; z-index: 999;
+    }
+    #notification.show { display: block; opacity: 1; }
+    #paymentModal, #qrModal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;
+    }
+    .modal-content {
+      background: #fff; padding: 30px; border-radius: 10px;
+      width: 320px; text-align: center; position: relative;
+    }
+  .auth {
+  position: relative;
+  background: #fff;
+  height: calc(100vh - 100px); /* Adjust based on header height */
+}
+
+.auth-box {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: center;
+  width: 250px;
+}
+
+body.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-mode .header,
+body.dark-mode nav,
+body.dark-mode footer {
+  background: #1f1f1f;
+  color: #ffffff;
+}
+
+body.dark-mode .hero {
+  background-color: #1c1c1c;
+  color: #ffffff;
+}
+
+body.dark-mode .product,
+body.dark-mode .auth-box,
+body.dark-mode .modal-content,
+body.dark-mode .cart,
+body.dark-mode .profile,
+body.dark-mode .about,
+body.dark-mode .contact {
+  background-color: #2c2c2c;
+  color: #ffffff;
+  border-color: #444;
+}
+
+body.dark-mode input,
+body.dark-mode button {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #777;
+}
+
+body.dark-mode button:hover {
+  background-color: #555;
+}
+
+body.dark-mode nav a {
+  color: #ddd;
+}
+
+body.dark-mode input#searchInput {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+body.dark-mode #notification {
+  background: #4caf50;
+  color: #fff;
+}
+
+body.dark-mode #qrModal .modal-content {
+  background: #2a2a2a;
+  color: #fff;
+}
+body, .product, .auth-box, .modal-content {
+  transition: background 0.3s, color 0.3s;
+}
+.auth-box, .product, .modal-content {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+
+body.dark-mode nav {
+  background: #333;
+  border-bottom: 1px solid #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+body.dark-mode nav a {
+  color: #f0f0f0;
+}
+
+body.dark-mode nav a:hover {
+  color: #ffffff;
+  
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 3.5px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+@media (max-width: 600px) {
+  nav a {
+    margin: 0 10px;
+    font-size: 14px;
+  }
+
+  .product-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .auth-box {
+    width: 90%;
+  }
+}
+.product {
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.product button {
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.product button:hover {
+  background: #444;
+}
+.product img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.product button {
+  font-size: 14px;
+  padding: 6px 10px;
+}
+
+  </style>
+</head>
+<body>
+<div id="notification"></div>
+<header class="header">
+  <img src="Preview-Pica.png" alt="MKT Logo" class="logo" />
+  <h1>MKT DEPARTMENT STORE</h1>
+</header>
+<nav id="mainNav" style="display:none;">
+  <a onclick="showSection('home')">Home</a>
+  <a onclick="showSection('products')">Categories</a>
+  <a onclick="showSection('cart')">Cart</a>
+  <a onclick="showSection('profile')">Profile</a>
+  <a onclick="showSection('about')">About</a>
+  <a onclick="showSection('contact')">Contact</a>
+
+ 
+  <label class="switch" style="float:right; margin-right:20px; margin-top: 5px;">
+  <input type="checkbox" id="darkToggleSwitch" onchange="toggleDarkModeSwitch()">
+  <span class="slider"></span>
+</label>
+</nav>
+<main>
+
+<section id="auth" class="auth">
+  <div class="auth-box">
+    <h2>MKT Store</h2>
+    <div id="authChoice">
+      <button onclick="showLogin()">Login</button>
+      <button onclick="showSignup()">Sign Up</button>
+    </div>
+    <div id="loginDiv" style="display:none;">
+      <h3>Login</h3>
+      <input id="loginUser" placeholder="Username"><br>
+      <input id="loginPass" type="password" placeholder="Password"><br>
+      <button onclick="login()">Login</button>
+      <button onclick="backAuth()">Back</button>
+    </div>
+    <div id="signupDiv" style="display:none;">
+      <h3>Sign Up</h3>
+      <input id="signupUser" placeholder="Username"><br>
+      <input id="signupPass" type="password" placeholder="Password"><br>
+      <button onclick="signup()">Register</button>
+      <button onclick="backAuth()">Back</button>
+    </div>
+  </div>
+</section>
+
+  
+  <div id="loginDiv" style="display:none;">
+    <h3>Login</h3>
+    <input id="loginUser" placeholder="Username"><br>
+    <input id="loginPass" type="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+    <button onclick="backAuth()">Back</button>
+  </div>
+  <div id="signupDiv" style="display:none;">
+    <h3>Sign Up</h3>
+    <input id="signupUser" placeholder="Username"><br>
+    <input id="signupPass" type="password" placeholder="Password"><br>
+    <button onclick="signup()">Register</button>
+    <button onclick="backAuth()">Back</button>
+  </div>
+</section>
+    <div id="loginDiv" style="display:none;">
+      <h3>Login</h3>
+      <input id="loginUser" placeholder="Username"><br>
+      <input id="loginPass" type="password" placeholder="Password"><br>
+      <button onclick="login()">Login</button>
+      <button onclick="backAuth()">Back</button>
+    </div>
+    <div id="signupDiv" style="display:none;">
+      <h3>Sign Up</h3>
+      <input id="signupUser" placeholder="Username"><br>
+      <input id="signupPass" type="password" placeholder="Password"><br>
+      <button onclick="signup()">Register</button>
+      <button onclick="backAuth()">Back</button>
+    </div>
+  </section>
+  <section id="home" style="display:none;">
+    <div class="hero">
+      <h2>Welcome to MKT Department Store</h2>
+      <p>🛒 Shop smart, shop MKT</p>
+    </div>
+  </section>
+  <section id="products" class="products" style="display:none;">
+    <div class="categories">
+      <button onclick="filterProducts('vegetable')">Vegetables</button>
+      <button onclick="filterProducts('fruit')">Fruits</button>
+      <button onclick="filterProducts('dhal')">Dhals</button>
+      <button onclick="filterProducts('stationery')">Stationery</button>
+      <button onclick="showAllProducts()">Show All</button>
+    </div>
+    <div style="text-align:center; margin: 20px;">
+      <input type="text" id="searchInput" placeholder="Search products..."
+        style="padding:8px; width:200px; border:1px solid #ccc; border-radius:5px;"
+        oninput="searchProducts()" />
+    </div>
+    <h2>Products</h2>
+   <div>
+      <div class="product-grid">
+        <!-- Example Product (add all your products here) -->
+       <div class="product" data-category="fruit">
+        <img src="apple.avif" alt="Apple" />
+        <h3>Apple</h3>
+        <p>₹200</p>
+        <button onclick="addToCart('Apple', 200)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="fruit">
+        <img src="watermelon.jpg" alt="Watermelon" />
+        <h3>Watermelon</h3>
+        <p>₹25</p>
+        <button onclick="addToCart('Watermelon', 25)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="fruit">
+        <img src="orange.jpg" alt="Orange" />
+        <h3>Orange</h3>
+        <p>₹125</p>
+        <button onclick="addToCart('Orange', 125)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="fruit">
+        <img src="grapes.jpg" alt="Grapes" />
+        <h3>Grapes</h3>
+        <p>₹100</p>
+        <button onclick="addToCart('Grapes', 100)">Add to Cart</button>
+      </div>
+
+
+      <div class="product" data-category="vegetable">
+        <img src="carrot.jpg" alt="Carrot" />
+        <h3>Carrot</h3>
+        <p>₹50</p>
+        <button onclick="addToCart('Carrot', 50)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="vegetable">
+        <img src="tomato.avif" alt="Tomato" />
+        <h3>Tomato</h3>
+        <p>₹39</p>
+        <button onclick="addToCart('Tomato', 39)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="vegetable">
+        <img src="potato.jpg" alt="Potato" />
+        <h3>Potato</h3>
+        <p>₹25</p>
+        <button onclick="addToCart('Potato', 25)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="vegetable">
+        <img src="beetroot.webp" alt="Beetroot" />
+        <h3>Beetroot</h3>
+        <p>₹70</p>
+        <button onclick="addToCart('Beetroot', 70)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="vegetable">
+        <img src="brinjal.webp" alt="Brinjal" />
+        <h3>Brinjal</h3>
+        <p>₹55</p>
+        <button onclick="addToCart('Brinjal', 55)">Add to Cart</button>
+      </div>
+        <div class="product" data-category="dhal">
+        <img src="red dhal.jpeg" alt="Red Dhal" />
+        <h3>Red Dhal</h3>
+        <p>₹65</p>
+        <button onclick="addToCart('Red Dhal', 65)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="dhal">
+        <img src="moong dhal.webp" alt="Moong Dhal" />
+        <h3>Yellow Moong Dhal</h3>
+        <p>₹130</p>
+        <button onclick="addToCart('Yellow Moong Dhal', 130)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="dhal">
+        <img src="channa dhal.jpg" alt="Chana Dhal" />
+        <h3>Chana Dhal</h3>
+        <p>₹70</p>
+        <button onclick="addToCart('Chana Dhal', 70)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="dhal">
+        <img src="white channa.jpg" alt="White Chana" />
+        <h3>White Chana</h3>
+        <p>₹80</p>
+        <button onclick="addToCart('White Chana', 80)">Add to Cart</button>
+      </div>
+      <div class="product" data-category="dhal">
+        <img src="black channa.webp" alt="Black Chana" />
+        <h3>Black Chana</h3>
+        <p>₹90</p>
+        <button onclick="addToCart('Black Chana', 90)">Add to Cart</button>
+      </div>
+        <div class="product" data-category="stationery">
+        <img src="pen.jpg" alt="Pen" />
+        <h3>Ball Pen</h3>
+        <p>₹10</p>
+        <button onclick="addToCart('Ball Pen', 10)">Add to Cart</button>
+      </div>
+   
+ 
+
+
+    </div>
+  </section>
+  <section id="cart" class="cart" style="display:none;">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <h3 id="cart-total">Total: ₹0</h3>
+    <button onclick="showPaymentModal()">Buy Now</button>
+  </section>
+  <section id="profile" class="profile" style="display:none;">
+    <h2>My Profile</h2>
+    <div style="max-width:400px; margin:auto;">
+      <label>Username</label><br>
+      <input type="text" id="profileUsername" style="width:100%;padding:5px;"><br><br>
+      <label>Password</label><br>
+      <input type="password" id="profilePassword" readonly style="width:100%;padding:5px;"><br><br>
+      <label>Email</label><br>
+      <input type="email" id="profileEmail" style="width:100%;padding:5px;"><br><br>
+      <label>Phone</label><br>
+      <input type="text" id="profilePhone" style="width:100%;padding:5px;"><br><br>
+      <label>Address</label><br>
+      <input type="text" id="profileAddress" style="width:100%;padding:5px;"><br><br>
+      <button onclick="saveProfile()">Update</button>
+      <button onclick="showChangePassword()" style="margin-left:10px;">Change Password</button>
+      <button onclick="deleteAccount()" style="margin-left:10px;">Delete Account</button>
+      <button onclick="logout()" style="margin-left:10px; margin-top:10px;">Logout</button>
+    </div>
+    <div id="changePassDiv" style="margin-top:15px; display:none; max-width:400px; margin:auto;">
+      <h3>Change Password</h3>
+      <input type="password" id="currentPassword" placeholder="Current password" style="width:100%;padding:5px;margin:5px 0;"><br>
+      <input type="password" id="newPassword" placeholder="New password" style="width:100%;padding:5px;margin:5px 0;"><br>
+      <button onclick="changePassword()">Submit</button>
+    </div>
+  </section>
+  <section id="about" class="about" style="display:none;">
+    <h2>About Us</h2>
+    <p>MKT Department Store is built on Merchandise, Knowledge, and Trust.We bring you quality products at affordable prices.</p>
+  </section>
+  <section id="contact" class="contact" style="display:none;">
+    <h2>Contact Us</h2>
+    <p>Email: madhurakanagaraj05@gmail.com<br>Phone: +91 9384782665</p>
+  </section>
+</main>
+<div id="paymentModal">
+  <div class="modal-content">
+    <h3>Select Payment Method</h3>
+    <label><input type="radio" name="paymentMethod" value="Cash" checked> Cash</label><br>
+    <label><input type="radio" name="paymentMethod" value="Card"> Card</label><br><br>
+    <button onclick="preparePayment()">Proceed</button>
+    <button onclick="document.getElementById('paymentModal').style.display='none'">Cancel</button>
+  </div>
+</div>
+<div id="qrModal">
+  <div class="modal-content">
+    <h3>Scan to Pay</h3>
+    <img id="qrImage" src="" alt="QR Code" style="width:200px;height:200px;margin:20px 0;" />
+    <p>Scan to pay ₹<span id="qrAmount"></span> to MKT Store</p>
+    <button onclick="confirmQRPayment()">I Paid</button>
+    <button onclick="document.getElementById('qrModal').style.display='none'">Cancel</button>
+  </div>
+</div>
+<!-- Scrollable Cart Button inside Categories Section -->
+<!-- Scrollable Cart Button at Bottom -->
+<div id="floatingCart"
+  onclick="showSection('cart')"
+  style="margin-top: 40px;  color: #000;
+          padding: 10px 10px; cursor: pointer;
+          font-size: 18px; display: none;
+         width: fit-content; margin-left: auto; margin-right: 20px;">
+  🛒 <span id="cartCount" style="font-weight: bold;">0</span>
+</div>
+<footer>&copy; MKT Department Store. All rights reserved.</footer>
+<script>
+let currentUser = null;
+let cart = JSON.parse(localStorage.getItem("mktCart")||"[]");
+function saveCart(){localStorage.setItem("mktCart",JSON.stringify(cart));}
+function addToCart(name,price){
+  const item=cart.find(i=>i.name===name);
+  if(item)item.quantity++;else cart.push({name,price,quantity:1});
+  renderCart();saveCart();
+  showNotification(`${name} added to cart`);
+}
+function removeItem(i){cart.splice(i,1);renderCart();saveCart();}
+function renderCart() {
+  const div = document.getElementById('cart-items');
+  const totalEl = document.getElementById('cart-total');
+  div.innerHTML = ''; let total = 0, count = 0;
+  cart.forEach((it, i) => {
+    const itemTotal = it.price * it.quantity;
+    total += itemTotal;
+    count += it.quantity;
+    div.innerHTML += `<div class="cart-item">${it.name} - ₹${it.price} × ${it.quantity} = ₹${itemTotal}<button onclick="removeItem(${i})">Remove</button></div>`;
+  });
+  totalEl.textContent = `Total: ₹${total}`;
+  document.getElementById("cartCount").textContent = count;
+}
+function showSection(id) {
+  ['auth', 'home', 'products', 'cart', 'profile', 'about', 'contact'].forEach(s => {
+    document.getElementById(s).style.display = s === id ? 'block' : 'none';
+  });
+
+  // Show/hide floating cart only in category/products page
+  document.getElementById("floatingCart").style.display = (id === "products") ? "block" : "none";
+
+  if (id === "cart") renderCart();
+  if (id === "profile") {
+    document.getElementById("changePassDiv").style.display = "none";
+    renderProfile();
+  }
+}
+function showLogin(){document.getElementById("authChoice").style.display="none";document.getElementById("loginDiv").style.display="block";}
+function showSignup(){document.getElementById("authChoice").style.display="none";document.getElementById("signupDiv").style.display="block";}
+function backAuth(){document.getElementById("loginDiv").style.display="none";document.getElementById("signupDiv").style.display="none";document.getElementById("authChoice").style.display="block";}
+function signup(){
+  let u=document.getElementById("signupUser").value;
+  let p=document.getElementById("signupPass").value;
+  let users=JSON.parse(localStorage.getItem("mktUsers")||"[]");
+  if(users.find(x=>x.username===u)){alert("User exists");return;}
+  users.push({username:u,password:p});
+  localStorage.setItem("mktUsers",JSON.stringify(users));
+  alert("Registered. Please login.");showLogin();
+}
+function login(){
+  let u=document.getElementById("loginUser").value;
+  let p=document.getElementById("loginPass").value;
+  let users=JSON.parse(localStorage.getItem("mktUsers")||"[]");
+  let user=users.find(x=>x.username===u&&x.password===p);
+  if(!user){alert("Wrong");return;}
+  currentUser=u;localStorage.setItem("currentUser",currentUser);
+  localStorage.setItem("lastUser",currentUser);
+  document.getElementById("mainNav").style.display="block";
+  showSection("home");
+  document.getElementById("auth").style.display="none";
+}
+function logout(){currentUser=null;localStorage.removeItem("currentUser");
+document.getElementById("mainNav").style.display="none";showSection("auth");
+let rememberedUser=localStorage.getItem("lastUser");
+if(rememberedUser){document.getElementById("loginUser").value=rememberedUser;document.getElementById("loginPass").value="";}}
+function showPaymentModal(){if(cart.length===0)return alert("Cart empty!");
+document.getElementById('paymentModal').style.display='flex';}
+function preparePayment(){
+const method=document.querySelector('input[name="paymentMethod"]:checked').value;
+const total=cart.reduce((sum,item)=>sum+item.price*item.quantity,0);
+document.getElementById('paymentModal').style.display='none';
+if(method==="Cash"){cart=[];renderCart();saveCart();showNotification(`Paid ₹${total} by Cash. Thank you!`);}
+else{const upiId="madhurakanagaraj05@okhdfcbank";
+const upiLink=`upi://pay?pa=${upiId}&pn=MKT%20Store&am=${total}&cu=INR`;
+document.getElementById("qrImage").src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiLink)}`;
+document.getElementById("qrAmount").textContent=total;
+document.getElementById("qrModal").style.display='flex';}}
+function confirmQRPayment(){cart=[];renderCart();saveCart();
+document.getElementById("qrModal").style.display="none";showNotification("Payment received. Thank you!");}
+function renderProfile(){
+  let users = JSON.parse(localStorage.getItem("mktUsers") || "[]");
+  let user = users.find(x => x.username === currentUser);
+
+  if (!user) {
+    // fallback to first user if currentUser is stale
+    if (users.length) {
+      user = users[0];
+      currentUser = user.username;
+      localStorage.setItem("currentUser", currentUser);
+    } else {
+      return;
+    }
+  }
+
+  document.getElementById("profileUsername").value = user.username;
+  document.getElementById("profilePassword").value = "********";
+  document.getElementById("profileEmail").value = user.email || "";
+  document.getElementById("profilePhone").value = user.phone || "";
+  document.getElementById("profileAddress").value = user.address || "";
+}
+function saveProfile(){
+  let users = JSON.parse(localStorage.getItem("mktUsers") || "[]");
+  let idx = users.findIndex(x => x.username === currentUser);
+  if (idx === -1) return;
+
+  let newUsername = document.getElementById("profileUsername").value;
+  let newEmail = document.getElementById("profileEmail").value;
+  let newPhone = document.getElementById("profilePhone").value;
+  let newAddress = document.getElementById("profileAddress").value;
+
+  // check duplicate usernames
+  if (newUsername !== currentUser && users.find(x => x.username === newUsername)) {
+    alert("Username already exists");
+    return;
+  }
+
+  users[idx].username = newUsername;
+  users[idx].email = newEmail;
+  users[idx].phone = newPhone;
+  users[idx].address = newAddress;
+
+  // update currentUser to the new name
+  currentUser = newUsername;
+  localStorage.setItem("currentUser", currentUser);
+  localStorage.setItem("lastUser", currentUser);
+
+  localStorage.setItem("mktUsers", JSON.stringify(users));
+  alert("Profile updated");
+  renderProfile();
+}
+function showChangePassword(){document.getElementById("changePassDiv").style.display="block";}
+function changePassword(){
+let curr=document.getElementById("currentPassword").value;
+let n=document.getElementById("newPassword").value;
+let users=JSON.parse(localStorage.getItem("mktUsers")||"[]");
+let idx=users.findIndex(x=>x.username===currentUser);
+if(users[idx].password!==curr){alert("Wrong current password");return;}
+users[idx].password=n;localStorage.setItem("mktUsers",JSON.stringify(users));
+alert("Password changed");document.getElementById("changePassDiv").style.display="none";}
+function deleteAccount(){
+if(confirm("Delete account?")){
+let users=JSON.parse(localStorage.getItem("mktUsers")||"[]");
+users=users.filter(x=>x.username!==currentUser);
+localStorage.setItem("mktUsers",JSON.stringify(users));
+logout();}}
+function showNotification(msg){
+const n=document.getElementById('notification');
+n.textContent=msg;n.classList.add('show');
+setTimeout(()=>{n.classList.remove('show');},2000);}
+function filterProducts(cat){
+showSection('products');
+document.querySelectorAll('.product').forEach(p=>p.style.display=p.dataset.category===cat?'block':'none');}
+function showAllProducts(){
+showSection('products');
+document.querySelectorAll('.product').forEach(p=>p.style.display='block');}
+function searchProducts(){
+const term=document.getElementById('searchInput').value.toLowerCase();
+document.querySelectorAll('.product').forEach(p=>{
+const name=p.querySelector('h3').textContent.toLowerCase();
+p.style.display=name.includes(term)?'block':'none';});}
+
+function toggleDarkModeSwitch() {
+  const isDark = document.getElementById("darkToggleSwitch").checked;
+  document.body.classList.toggle("dark-mode", isDark);
+  localStorage.setItem("mktDarkMode", isDark ? "on" : "off");
+}
+window.onload=function(){
+currentUser=localStorage.getItem("currentUser");
+if(currentUser){
+document.getElementById("mainNav").style.display="block";
+showSection("home");
+renderCart();
+renderProfile();
+document.getElementById("auth").style.display="none";
+}else{showSection("auth");
+let rememberedUser=localStorage.getItem("lastUser");
+if(rememberedUser){document.getElementById("loginUser").value=rememberedUser;document.getElementById("loginPass").value="";}}}
+
+const isDarkSaved = localStorage.getItem("mktDarkMode") === "on";
+if (isDarkSaved) {
+  document.body.classList.add("dark-mode");
+  document.getElementById("darkToggleSwitch").checked = true;
+}
+
+;
+</script>
+</body>
+</html>
